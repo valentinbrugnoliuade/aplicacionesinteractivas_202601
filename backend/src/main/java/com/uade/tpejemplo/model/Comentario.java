@@ -52,3 +52,6 @@ public class Comentario {
     @JoinColumn(name = "id_cobranza")
     private Cobranza cobranza;
 }
+
+//test
+
