@@ -1,13 +1,13 @@
 package com.uade.tpejemplo.dto.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class CreditoResponse {
 

@@ -25,4 +25,14 @@ public class Cliente {
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Credito> creditos;
+
+    // Getters
+    public String getDni() { return dni; }
+    public String getNombre() { return nombre; }
+    public List<Credito> getCreditos() { return creditos; }
+
+    // Setters
+    public void setDni(String dni) { this.dni = dni; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setCreditos(List<Credito> creditos) { this.creditos = creditos; }
 }

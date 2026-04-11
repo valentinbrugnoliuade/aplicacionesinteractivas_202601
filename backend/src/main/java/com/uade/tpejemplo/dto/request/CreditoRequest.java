@@ -4,12 +4,18 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreditoRequest {
 
     @NotBlank(message = "El DNI del cliente es obligatorio")
@@ -29,4 +35,18 @@ public class CreditoRequest {
     @NotNull(message = "La cantidad de cuotas es obligatoria")
     @Min(value = 1, message = "Debe tener al menos 1 cuota")
     private Integer cantidadCuotas;
+
+    // Getters
+    public String getDniCliente() { return dniCliente; }
+    public BigDecimal getDeudaOriginal() { return deudaOriginal; }
+    public LocalDate getFecha() { return fecha; }
+    public BigDecimal getImporteCuota() { return importeCuota; }
+    public Integer getCantidadCuotas() { return cantidadCuotas; }
+
+    // Setters
+    public void setDniCliente(String dniCliente) { this.dniCliente = dniCliente; }
+    public void setDeudaOriginal(BigDecimal deudaOriginal) { this.deudaOriginal = deudaOriginal; }
+    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
+    public void setImporteCuota(BigDecimal importeCuota) { this.importeCuota = importeCuota; }
+    public void setCantidadCuotas(Integer cantidadCuotas) { this.cantidadCuotas = cantidadCuotas; }
 }

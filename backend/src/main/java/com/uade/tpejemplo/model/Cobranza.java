@@ -30,4 +30,14 @@ public class Cobranza {
     @NotNull
     @Column(name = "importe", nullable = false, precision = 12, scale = 2)
     private BigDecimal importe;
+
+    // Getters
+    public Long getId() { return id; }
+    public Cuota getCuota() { return cuota; }
+    public BigDecimal getImporte() { return importe; }
+
+    // Setters
+    public void setId(Long id) { this.id = id; }
+    public void setCuota(Cuota cuota) { this.cuota = cuota; }
+    public void setImporte(BigDecimal importe) { this.importe = importe; }
 }

@@ -36,11 +36,7 @@ public class AuthController {
             throw new BusinessException("El usuario '" + request.getUsername() + "' ya existe");
         }
 
-        Usuario usuario = Usuario.builder()
-            .username(request.getUsername())
-            .password(passwordEncoder.encode(request.getPassword()))
-            .rol(Rol.USER)
-            .build();
+        Usuario usuario = new Usuario(null, request.getUsername(), passwordEncoder.encode(request.getPassword()), Rol.USER);
 
         usuarioRepository.save(usuario);
 
