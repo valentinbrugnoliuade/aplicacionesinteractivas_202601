@@ -2,6 +2,7 @@ package com.uade.tpejemplo.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -34,6 +35,13 @@ public class GlobalExceptionHandler {
             .toList();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
             new ErrorResponse(400, "Error de validación", errores, LocalDateTime.now())
+        );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+            new ErrorResponse(401, "Credenciales inválidas", List.of("Usuario o contraseña incorrectos"), LocalDateTime.now())
         );
     }
 

@@ -8,6 +8,7 @@ const NAV = [
   { to: '/clientes', label: 'Clientes', icon: ClienteIcon },
   { to: '/creditos', label: 'Créditos', icon: CreditoIcon },
   { to: '/cobranzas', label: 'Cobranzas', icon: CobranzaIcon },
+  { to: '/comentarios', label: 'Comentarios', icon: ComentarioIcon },
 ]
 
 export default function Layout() {
@@ -75,6 +76,9 @@ function CreditoIcon() {
 }
 function CobranzaIcon() {
   return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.2"/><path d="M8 4.5v3.5l2 2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+}
+function ComentarioIcon() {
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H6l-3 2v-2H3a1 1 0 0 1-1-1V3Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/><path d="M5 6h6M5 8.5h4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
 }
 function LogoutIcon() {
   return <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5.5 2H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/><path d="M9.5 9.5 12 7l-2.5-2.5M12 7H5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>

@@ -1,13 +1,4 @@
 -- =====================================================
--- Usuarios
--- Passwords encriptadas con BCrypt para "password123"
--- =====================================================
-INSERT INTO usuarios (username, password, rol) VALUES
-('admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LPVXNKfJGRK', 'ADMIN'),
-('juan',  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LPVXNKfJGRK', 'USER'),
-('maria', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LPVXNKfJGRK', 'USER');
-
--- =====================================================
 -- Clientes
 -- =====================================================
 INSERT INTO clientes (dni, nombre) VALUES
@@ -71,11 +62,3 @@ INSERT INTO cobranzas (id_credito, id_cuota, importe) VALUES
 (1, 2, 5000.00),
 (2, 1, 3000.00);
 
--- =====================================================
--- Comentarios
--- =====================================================
-INSERT INTO comentarios (contenido, tipo_entidad, fecha_creacion, id_usuario, dni_cliente, id_credito, id_cobranza) VALUES
-('Cliente con excelente historial de pagos.',    'CLIENTE',  '2026-04-01T09:00:00', 2, '20111222', NULL, NULL),
-('Revisar situacion crediticia antes de renovar.','CLIENTE', '2026-04-02T10:30:00', 1, '30444555', NULL, NULL),
-('Credito aprobado con condiciones especiales.', 'CREDITO',  '2026-04-03T11:00:00', 2, NULL, 1, NULL),
-('Primera cuota abonada en termino.',            'COBRANZA', '2026-04-04T14:00:00', 2, NULL, NULL, 1);

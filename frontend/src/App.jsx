@@ -7,6 +7,7 @@ import DashboardPage from './pages/DashboardPage'
 import ClientesPage from './pages/ClientesPage'
 import CreditosPage from './pages/CreditosPage'
 import CobranzasPage from './pages/CobranzasPage'
+import ComentariosPage from './pages/ComentariosPage'
 
 function ProtectedRoute({ children }) {
   const isAuthenticated = useSelector(selectIsAuthenticated)
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="clientes" element={<ClientesPage />} />
           <Route path="creditos" element={<CreditosPage />} />
           <Route path="cobranzas" element={<CobranzasPage />} />
+          <Route path="comentarios" element={<ComentariosPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
