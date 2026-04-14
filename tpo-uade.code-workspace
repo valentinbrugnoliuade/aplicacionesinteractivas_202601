@@ -1,0 +1,9 @@
+{
+  "folders": [
+    { "name": "Backend (Spring Boot)", "path": "./backend" },
+    { "name": "Frontend (React)", "path": "./frontend" }
+  ],
+  "settings": {
+    "java.configuration.updateBuildConfiguration": "automatic"
+  }
+}
