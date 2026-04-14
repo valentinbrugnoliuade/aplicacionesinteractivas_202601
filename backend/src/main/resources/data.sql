@@ -1,0 +1,81 @@
+-- =====================================================
+-- Usuarios
+-- Passwords encriptadas con BCrypt para "password123"
+-- =====================================================
+INSERT INTO usuarios (username, password, rol) VALUES
+('admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LPVXNKfJGRK', 'ADMIN'),
+('juan',  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LPVXNKfJGRK', 'USER'),
+('maria', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LPVXNKfJGRK', 'USER');
+
+-- =====================================================
+-- Clientes
+-- =====================================================
+INSERT INTO clientes (dni, nombre) VALUES
+('20111222', 'Carlos Gomez'),
+('30444555', 'Ana Lopez'),
+('25789012', 'Pedro Martinez');
+
+-- =====================================================
+-- Creditos
+-- =====================================================
+INSERT INTO creditos (dni_cliente, deuda_original, fecha, importe_cuota, cantidad_cuotas) VALUES
+('20111222', 50000.00, '2026-01-10', 5000.00, 10),
+('30444555', 30000.00, '2026-02-15', 3000.00, 10),
+('25789012', 20000.00, '2026-03-01', 4000.00, 5);
+
+-- =====================================================
+-- Cuotas (para credito id=1: 10 cuotas)
+-- =====================================================
+INSERT INTO cuotas (id_credito, id_cuota, fecha_vencimiento) VALUES
+(1, 1,  '2026-02-10'),
+(1, 2,  '2026-03-10'),
+(1, 3,  '2026-04-10'),
+(1, 4,  '2026-05-10'),
+(1, 5,  '2026-06-10'),
+(1, 6,  '2026-07-10'),
+(1, 7,  '2026-08-10'),
+(1, 8,  '2026-09-10'),
+(1, 9,  '2026-10-10'),
+(1, 10, '2026-11-10');
+
+-- =====================================================
+-- Cuotas (para credito id=2: 10 cuotas)
+-- =====================================================
+INSERT INTO cuotas (id_credito, id_cuota, fecha_vencimiento) VALUES
+(2, 1,  '2026-03-15'),
+(2, 2,  '2026-04-15'),
+(2, 3,  '2026-05-15'),
+(2, 4,  '2026-06-15'),
+(2, 5,  '2026-07-15'),
+(2, 6,  '2026-08-15'),
+(2, 7,  '2026-09-15'),
+(2, 8,  '2026-10-15'),
+(2, 9,  '2026-11-15'),
+(2, 10, '2026-12-15');
+
+-- =====================================================
+-- Cuotas (para credito id=3: 5 cuotas)
+-- =====================================================
+INSERT INTO cuotas (id_credito, id_cuota, fecha_vencimiento) VALUES
+(3, 1, '2026-04-01'),
+(3, 2, '2026-05-01'),
+(3, 3, '2026-06-01'),
+(3, 4, '2026-07-01'),
+(3, 5, '2026-08-01');
+
+-- =====================================================
+-- Cobranzas (algunos pagos registrados)
+-- =====================================================
+INSERT INTO cobranzas (id_credito, id_cuota, importe) VALUES
+(1, 1, 5000.00),
+(1, 2, 5000.00),
+(2, 1, 3000.00);
+
+-- =====================================================
+-- Comentarios
+-- =====================================================
+INSERT INTO comentarios (contenido, tipo_entidad, fecha_creacion, id_usuario, dni_cliente, id_credito, id_cobranza) VALUES
+('Cliente con excelente historial de pagos.',    'CLIENTE',  '2026-04-01T09:00:00', 2, '20111222', NULL, NULL),
+('Revisar situacion crediticia antes de renovar.','CLIENTE', '2026-04-02T10:30:00', 1, '30444555', NULL, NULL),
+('Credito aprobado con condiciones especiales.', 'CREDITO',  '2026-04-03T11:00:00', 2, NULL, 1, NULL),
+('Primera cuota abonada en termino.',            'COBRANZA', '2026-04-04T14:00:00', 2, NULL, NULL, 1);

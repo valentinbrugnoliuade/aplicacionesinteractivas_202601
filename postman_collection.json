@@ -1,0 +1,245 @@
+{
+  "info": {
+    "name": "TPO UADE — Sistema de Comentarios",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('token', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/login",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"juan\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/register",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"nuevo_usuario\",\n  \"password\": \"password123\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comentarios",
+      "item": [
+        {
+          "name": "Crear comentario sobre un cliente",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/comentarios",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contenido\": \"Cliente con buen historial de pagos.\",\n  \"tipoEntidad\": \"CLIENTE\",\n  \"dniCliente\": \"20111222\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Crear comentario sobre un credito",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/comentarios",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contenido\": \"Credito aprobado con condiciones especiales.\",\n  \"tipoEntidad\": \"CREDITO\",\n  \"idCredito\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Crear comentario sobre una cobranza",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/comentarios",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contenido\": \"Cobranza recibida fuera de termino.\",\n  \"tipoEntidad\": \"COBRANZA\",\n  \"idCobranza\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Listar todos los comentarios",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/comentarios",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Buscar comentario por ID",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/comentarios/1",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Actualizar comentario",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/comentarios/1",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contenido\": \"Comentario actualizado correctamente.\",\n  \"tipoEntidad\": \"CLIENTE\",\n  \"dniCliente\": \"20111222\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Eliminar comentario",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/comentarios/1",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Listar comentarios por cliente",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/comentarios/cliente/20111222",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Listar comentarios por credito",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/comentarios/credito/1",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Listar comentarios por cobranza",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/comentarios/cobranza/1",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Errores (para el video)",
+      "item": [
+        {
+          "name": "Error - sin token (401)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/comentarios",
+            "header": []
+          }
+        },
+        {
+          "name": "Error - falta dniCliente (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/comentarios",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contenido\": \"Me olvide de poner el dni.\",\n  \"tipoEntidad\": \"CLIENTE\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Error - cliente inexistente (404)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/comentarios",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contenido\": \"Este cliente no existe.\",\n  \"tipoEntidad\": \"CLIENTE\",\n  \"dniCliente\": \"99999999\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Error - contenido vacio (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/comentarios",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contenido\": \"\",\n  \"tipoEntidad\": \"CLIENTE\",\n  \"dniCliente\": \"20111222\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
