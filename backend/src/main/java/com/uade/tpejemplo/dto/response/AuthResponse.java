@@ -1,9 +1,9 @@
 package com.uade.tpejemplo.dto.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @AllArgsConstructor
 public class AuthResponse {
 

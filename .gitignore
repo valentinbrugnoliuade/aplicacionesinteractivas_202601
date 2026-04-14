@@ -1,78 +1,32 @@
-# ==================== BACKEND (Java / Maven / Spring Boot) ====================
+# Node
+node_modules/
+npm-debug.log*
+.npm
 
-# Compiled output
-backend/target/
+# Vite
+dist/
+dist-ssr/
+*.local
+.vite/
 
-# Maven wrapper
-!backend/.mvn/wrapper/maven-wrapper.jar
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/timing.properties
 
-# Spring Boot log
-*.log
-spring-output.log
-spring-error.log
-
-# H2 database files (si se usa modo file en lugar de in-memory)
-*.db
-*.mv.db
-*.trace.db
-
-# Application secrets (nunca subir credenciales)
-backend/src/main/resources/application-prod.properties
-backend/src/main/resources/application-local.properties
-
-# ==================== FRONTEND (Node / React / Vite) ====================
-
-# Dependencies
-frontend/node_modules/
-
-# Build output
-frontend/dist/
-frontend/dist-ssr/
-
-# Vite / env locals
-frontend/.env.local
-frontend/.env.*.local
-frontend-output.log
-frontend-error.log
-
-# ==================== IDEs y editores ====================
-
-# IntelliJ IDEA
+# IDE
 .idea/
 *.iml
-*.iws
-*.ipr
-
-# VS Code
 .vscode/
-!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Eclipse
-.classpath
-.project
-.settings/
-
-# NetBeans
-nbproject/
-
-# ==================== Sistema operativo ====================
-
-# Windows
-Thumbs.db
-desktop.ini
-
-# macOS
+# OS
 .DS_Store
-.AppleDouble
-.LSOverride
-
-# ==================== Misceláneos ====================
-
-# Variables de entorno
-.env
-.env.local
-
-# Archivos temporales
-*.tmp
-*.swp
-*.swo
+Thumbs.db

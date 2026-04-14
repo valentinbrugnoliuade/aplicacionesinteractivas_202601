@@ -1,24 +1,39 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import PrivateRoute from './components/PrivateRoute';
-import Navbar from './components/Navbar';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Clientes from './pages/Clientes';
-import Creditos from './pages/Creditos';
-import Cobranzas from './pages/Cobranzas';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { selectIsAuthenticated } from './store/slices/authSlice'
+import Layout from './components/layout/Layout'
+import LoginPage from './pages/LoginPage'
+import DashboardPage from './pages/DashboardPage'
+import ClientesPage from './pages/ClientesPage'
+import CreditosPage from './pages/CreditosPage'
+import CobranzasPage from './pages/CobranzasPage'
+
+function ProtectedRoute({ children }) {
+  const isAuthenticated = useSelector(selectIsAuthenticated)
+  return isAuthenticated ? children : <Navigate to="/login" replace />
+}
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Navbar />
       <Routes>
-        <Route path="/login"     element={<Login />} />
-        <Route path="/register"  element={<Register />} />
-        <Route path="/clientes"  element={<PrivateRoute><Clientes /></PrivateRoute>} />
-        <Route path="/creditos"  element={<PrivateRoute><Creditos /></PrivateRoute>} />
-        <Route path="/cobranzas" element={<PrivateRoute><Cobranzas /></PrivateRoute>} />
-        <Route path="*"          element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="clientes" element={<ClientesPage />} />
+          <Route path="creditos" element={<CreditosPage />} />
+          <Route path="cobranzas" element={<CobranzasPage />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }

@@ -1,59 +1,68 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { login as loginApi, register as registerApi } from '../../api/auth';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { authService } from '../../services/authService'
 
-export const loginThunk = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
-  try {
-    return await loginApi(credentials);
-  } catch (err) {
-    return rejectWithValue(err.message);
-  }
-});
+const tokenFromStorage = localStorage.getItem('token')
 
-export const registerThunk = createAsyncThunk('auth/register', async (data, { rejectWithValue }) => {
+export const login = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
   try {
-    return await registerApi(data);
+    return await authService.login(credentials)
   } catch (err) {
-    return rejectWithValue(err.message);
+    return rejectWithValue(err.message)
   }
-});
+})
+
+export const register = createAsyncThunk('auth/register', async (data, { rejectWithValue }) => {
+  try {
+    return await authService.register(data)
+  } catch (err) {
+    return rejectWithValue(err.message)
+  }
+})
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user:    JSON.parse(localStorage.getItem('authUser')) ?? null,
+    token: tokenFromStorage || null,
+    username: null,
+    rol: null,
     loading: false,
-    error:   null,
+    error: null,
   },
   reducers: {
     logout(state) {
-      state.user = null;
-      localStorage.removeItem('authUser');
-      localStorage.removeItem('token');
+      state.token = null
+      state.username = null
+      state.rol = null
+      localStorage.removeItem('token')
     },
     clearError(state) {
-      state.error = null;
+      state.error = null
     },
   },
   extraReducers: (builder) => {
-    const onPending  = (state) => { state.loading = true;  state.error = null; };
-    const onFulfilled = (state, action) => {
-      state.loading = false;
-      state.user = action.payload;
-      localStorage.setItem('authUser', JSON.stringify(action.payload));
-      // sincronizar token para apiClient
-      localStorage.setItem('token', action.payload.token);
-    };
-    const onRejected = (state, action) => { state.loading = false; state.error = action.payload; };
-
+    const handlePending = (state) => { state.loading = true; state.error = null }
+    const handleFulfilled = (state, action) => {
+      state.loading = false
+      state.token = action.payload.token
+      state.username = action.payload.username
+      state.rol = action.payload.rol
+      localStorage.setItem('token', action.payload.token)
+    }
+    const handleRejected = (state, action) => {
+      state.loading = false
+      state.error = action.payload
+    }
     builder
-      .addCase(loginThunk.pending,     onPending)
-      .addCase(loginThunk.fulfilled,   onFulfilled)
-      .addCase(loginThunk.rejected,    onRejected)
-      .addCase(registerThunk.pending,  onPending)
-      .addCase(registerThunk.fulfilled,onFulfilled)
-      .addCase(registerThunk.rejected, onRejected);
+      .addCase(login.pending, handlePending)
+      .addCase(login.fulfilled, handleFulfilled)
+      .addCase(login.rejected, handleRejected)
+      .addCase(register.pending, handlePending)
+      .addCase(register.fulfilled, handleFulfilled)
+      .addCase(register.rejected, handleRejected)
   },
-});
+})
 
-export const { logout, clearError } = authSlice.actions;
-export default authSlice.reducer;
+export const { logout, clearError } = authSlice.actions
+export const selectIsAuthenticated = (state) => !!state.auth.token
+export const selectAuth = (state) => state.auth
+export default authSlice.reducer

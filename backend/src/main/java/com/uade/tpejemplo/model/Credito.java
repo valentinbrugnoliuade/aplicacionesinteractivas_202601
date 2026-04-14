@@ -45,22 +45,4 @@ public class Credito {
 
     @OneToMany(mappedBy = "credito", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Cuota> cuotas;
-
-    // Getters
-    public Long getId() { return id; }
-    public Cliente getCliente() { return cliente; }
-    public BigDecimal getDeudaOriginal() { return deudaOriginal; }
-    public LocalDate getFecha() { return fecha; }
-    public BigDecimal getImporteCuota() { return importeCuota; }
-    public Integer getCantidadCuotas() { return cantidadCuotas; }
-    public List<Cuota> getCuotas() { return cuotas; }
-
-    // Setters
-    public void setId(Long id) { this.id = id; }
-    public void setCliente(Cliente cliente) { this.cliente = cliente; }
-    public void setDeudaOriginal(BigDecimal deudaOriginal) { this.deudaOriginal = deudaOriginal; }
-    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
-    public void setImporteCuota(BigDecimal importeCuota) { this.importeCuota = importeCuota; }
-    public void setCantidadCuotas(Integer cantidadCuotas) { this.cantidadCuotas = cantidadCuotas; }
-    public void setCuotas(List<Cuota> cuotas) { this.cuotas = cuotas; }
 }

@@ -1,43 +1,37 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getCobranzasPorCredito, registrarCobranza } from '../../api/cobranzas';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { cobranzasService } from '../../services/cobranzasService'
 
-export const fetchCobranzasPorCredito = createAsyncThunk('cobranzas/fetchPorCredito', async (idCredito, { rejectWithValue }) => {
-  try {
-    return await getCobranzasPorCredito(idCredito);
-  } catch (err) {
-    return rejectWithValue(err.message);
-  }
-});
+export const fetchCobranzasPorCredito = createAsyncThunk('cobranzas/fetchByCredito', async (idCredito, { rejectWithValue }) => {
+  try { return await cobranzasService.listarPorCredito(idCredito) }
+  catch (err) { return rejectWithValue(err.message) }
+})
 
-export const addCobranza = createAsyncThunk('cobranzas/add', async (data, { rejectWithValue }) => {
-  try {
-    return await registrarCobranza(data);
-  } catch (err) {
-    return rejectWithValue(err.message);
-  }
-});
+export const registrarCobranza = createAsyncThunk('cobranzas/registrar', async (data, { rejectWithValue }) => {
+  try { return await cobranzasService.registrar(data) }
+  catch (err) { return rejectWithValue(err.message) }
+})
 
 const cobranzasSlice = createSlice({
   name: 'cobranzas',
-  initialState: {
-    lista:   [],
-    loading: false,
-    error:   null,
-  },
+  initialState: { list: [], loading: false, error: null, success: null },
   reducers: {
-    clearCobranzas(state) { state.lista = []; },
-    clearError(state)     { state.error = null; },
+    clearMessages(state) { state.error = null; state.success = null },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCobranzasPorCredito.pending,   (state) => { state.loading = true;  state.error = null; })
-      .addCase(fetchCobranzasPorCredito.fulfilled, (state, action) => { state.loading = false; state.lista = action.payload; })
-      .addCase(fetchCobranzasPorCredito.rejected,  (state, action) => { state.loading = false; state.error = action.payload; })
-      .addCase(addCobranza.pending,                (state) => { state.loading = true;  state.error = null; })
-      .addCase(addCobranza.fulfilled,              (state, action) => { state.loading = false; state.lista.push(action.payload); })
-      .addCase(addCobranza.rejected,               (state, action) => { state.loading = false; state.error = action.payload; });
+      .addCase(fetchCobranzasPorCredito.pending, (s) => { s.loading = true; s.error = null })
+      .addCase(fetchCobranzasPorCredito.fulfilled, (s, a) => { s.loading = false; s.list = a.payload })
+      .addCase(fetchCobranzasPorCredito.rejected, (s, a) => { s.loading = false; s.error = a.payload })
+      .addCase(registrarCobranza.pending, (s) => { s.loading = true; s.error = null; s.success = null })
+      .addCase(registrarCobranza.fulfilled, (s, a) => {
+        s.loading = false
+        s.list.push(a.payload)
+        s.success = `Cobranza registrada: $${a.payload.importe}`
+      })
+      .addCase(registrarCobranza.rejected, (s, a) => { s.loading = false; s.error = a.payload })
   },
-});
+})
 
-export const { clearCobranzas, clearError } = cobranzasSlice.actions;
-export default cobranzasSlice.reducer;
+export const { clearMessages } = cobranzasSlice.actions
+export const selectCobranzas = (state) => state.cobranzas
+export default cobranzasSlice.reducer

@@ -1,12 +1,12 @@
 package com.uade.tpejemplo.exception;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
+@Data
 @AllArgsConstructor
 public class ErrorResponse {
 
@@ -14,10 +14,4 @@ public class ErrorResponse {
     private String error;
     private List<String> mensajes;
     private LocalDateTime timestamp;
-
-    public ErrorResponse(int status, String error, List<String> mensajes, LocalDateTime timestamp) {
-        this.status = status;
-        this.error = error;
-        this.mensajes = mensajes;
-        this.timestamp = timestamp;
-    }
+}

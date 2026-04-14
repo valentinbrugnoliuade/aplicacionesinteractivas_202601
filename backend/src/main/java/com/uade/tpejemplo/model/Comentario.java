@@ -1,6 +1,9 @@
 package com.uade.tpejemplo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,49 +21,34 @@ public class Comentario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TipoEntidad tipoEntidad;
-
-    @Column(nullable = false, length = 1000)
+    @NotBlank
+    @Size(max = 1000)
+    @Column(name = "contenido", nullable = false, length = 1000)
     private String contenido;
 
-    @Column(nullable = false)
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_entidad", nullable = false)
+    private TipoEntidad tipoEntidad;
+
+    @NotNull
+    @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fechaCreacion;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dni_cliente")
     private Cliente cliente;
 
-    @ManyToOne
-    @JoinColumn(name = "credito_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_credito")
     private Credito credito;
 
-    @ManyToOne
-    @JoinColumn(name = "cobranza_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cobranza")
     private Cobranza cobranza;
-
-    // Getters
-    public Long getId() { return id; }
-    public TipoEntidad getTipoEntidad() { return tipoEntidad; }
-    public String getContenido() { return contenido; }
-    public LocalDateTime getFechaCreacion() { return fechaCreacion; }
-    public Usuario getUsuario() { return usuario; }
-    public Cliente getCliente() { return cliente; }
-    public Credito getCredito() { return credito; }
-    public Cobranza getCobranza() { return cobranza; }
-
-    // Setters
-    public void setId(Long id) { this.id = id; }
-    public void setTipoEntidad(TipoEntidad tipoEntidad) { this.tipoEntidad = tipoEntidad; }
-    public void setContenido(String contenido) { this.contenido = contenido; }
-    public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
-    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
-    public void setCliente(Cliente cliente) { this.cliente = cliente; }
-    public void setCredito(Credito credito) { this.credito = credito; }
-    public void setCobranza(Cobranza cobranza) { this.cobranza = cobranza; }
 }
