@@ -1,0 +1,32 @@
+# Node
+node_modules/
+npm-debug.log*
+.npm
+
+# Vite
+dist/
+dist-ssr/
+*.local
+.vite/
+
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/timing.properties
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
