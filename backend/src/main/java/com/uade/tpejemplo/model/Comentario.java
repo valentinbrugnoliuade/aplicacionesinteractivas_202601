@@ -35,6 +35,9 @@ public class Comentario {
     @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fechaCreacion;
 
+    // Para agregar un campo nuevo a la entidad JPA, declararlo acá con @Column
+    // Luego actualizar ComentarioRequest (entrada), ComentarioResponse (salida) y ComentarioServiceImpl
+
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)

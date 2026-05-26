@@ -23,6 +23,7 @@ export default function ComentariosPage() {
   const [formError, setFormError] = useState({})
   const [editingId, setEditingId] = useState(null)
 
+  // Acá se cargan los datos al montar el componente — dispatch llama al async thunk que hace fetch al backend
   useEffect(() => {
     dispatch(fetchComentarios())
     return () => dispatch(clearMessages())
@@ -33,6 +34,7 @@ export default function ComentariosPage() {
     setFormError((fe) => ({ ...fe, [e.target.name]: '' }))
   }
 
+  // Acá se validan los campos del formulario antes de enviar al backend
   const validate = () => {
     const errors = {}
     if (!form.contenido.trim()) errors.contenido = 'El contenido es obligatorio'
@@ -46,6 +48,7 @@ export default function ComentariosPage() {
     if (form.tipoEntidad === 'COBRANZA' && !form.idCobranza) {
       errors.idCobranza = 'El ID de cobranza es obligatorio para este tipo'
     }
+    // Acá se pueden agregar validaciones extra
     return errors
   }
 
@@ -129,6 +132,7 @@ export default function ComentariosPage() {
     <div className={styles.page}>
       <PageHeader title="Comentarios" subtitle="Gestión de comentarios por entidad" />
 
+      {/* Acá se muestran los errores y éxitos — vienen de Redux (state.comentarios.error / success) */}
       {error && <Alert type="error" onClose={() => dispatch(clearMessages())}>{error}</Alert>}
       {success && <Alert type="success" onClose={() => dispatch(clearMessages())}>{success}</Alert>}
 

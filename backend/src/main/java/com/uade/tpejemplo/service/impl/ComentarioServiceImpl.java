@@ -33,7 +33,7 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     @Override
     public ComentarioResponse crear(ComentarioRequest request, String username) {
-        validarReferencia(request);
+        validarReferencia(request); // ← llama a las validaciones de negocio
 
         Usuario usuario = usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", "username", username));
@@ -43,6 +43,8 @@ public class ComentarioServiceImpl implements ComentarioService {
         comentario.setTipoEntidad(request.getTipoEntidad());
         comentario.setFechaCreacion(LocalDateTime.now());
         comentario.setUsuario(usuario);
+
+        // Si se agrega un campo nuevo a la entidad, setearlo acá antes de guardar
 
         asignarEntidadRelacionada(comentario, request);
 
@@ -75,6 +77,8 @@ public class ComentarioServiceImpl implements ComentarioService {
 
         comentario.setContenido(request.getContenido());
         comentario.setTipoEntidad(request.getTipoEntidad());
+
+        // Si el campo nuevo también es editable, setearlo acá en el método actualizar
 
         comentario.setCliente(null);
         comentario.setCredito(null);
@@ -118,6 +122,7 @@ public class ComentarioServiceImpl implements ComentarioService {
                 .toList();
     }
 
+    // Acá se valida la lógica de negocio antes de persistir — lanza BusinessException (HTTP 400) si algo falla
     private void validarReferencia(ComentarioRequest request) {
         switch (request.getTipoEntidad()) {
             case CLIENTE -> {
@@ -145,6 +150,7 @@ public class ComentarioServiceImpl implements ComentarioService {
                 }
             }
         }
+        // Acá se pueden agregar validaciones extra de negocio
     }
 
     private void asignarEntidadRelacionada(Comentario comentario, ComentarioRequest request) {
@@ -167,6 +173,7 @@ public class ComentarioServiceImpl implements ComentarioService {
         }
     }
 
+    // Acá se mapea la entidad al DTO de respuesta — si se agrega un campo nuevo, incluirlo acá también
     private ComentarioResponse toResponse(Comentario comentario) {
         return new ComentarioResponse(
                 comentario.getId(),
@@ -177,6 +184,7 @@ public class ComentarioServiceImpl implements ComentarioService {
                 comentario.getCliente() != null ? comentario.getCliente().getDni() : null,
                 comentario.getCredito() != null ? comentario.getCredito().getId() : null,
                 comentario.getCobranza() != null ? comentario.getCobranza().getId() : null
+                // campo nuevo va acá
         );
     }
 }

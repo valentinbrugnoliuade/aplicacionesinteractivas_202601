@@ -22,4 +22,6 @@ public interface ComentarioService {
     List<ComentarioResponse> listarPorCredito(Long idCredito);
 
     List<ComentarioResponse> listarPorCobranza(Long idCobranza);
+
+    // Métodos nuevos se declaran acá en la interfaz y se implementan en ComentarioServiceImpl
 }

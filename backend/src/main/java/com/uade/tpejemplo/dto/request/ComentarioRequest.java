@@ -41,5 +41,7 @@ public class ComentarioRequest {
     private String dniCliente;
     private Long idCredito;
     private Long idCobranza;
+
+    // Campos nuevos del request se agregan acá — sin anotaciones si son opcionales
 // ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
 }

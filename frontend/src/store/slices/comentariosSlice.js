@@ -1,6 +1,8 @@
+// Acá está el estado global de comentarios — list, loading, error, success viven en state.comentarios
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { comentariosService } from '../../services/comentariosService'
 
+// Cada operación asíncrona es un thunk — maneja los tres estados: pending, fulfilled, rejected
 export const fetchComentarios = createAsyncThunk('comentarios/fetchAll', async (_, { rejectWithValue }) => {
   try { return await comentariosService.listarTodos() }
   catch (err) { return rejectWithValue(err.message) }
@@ -53,6 +55,8 @@ const comentariosSlice = createSlice({
         s.success = 'Comentario eliminado correctamente'
       })
       .addCase(eliminarComentario.rejected, (s, a) => { s.loading = false; s.error = a.payload })
+
+      // Acá se agregan los casos de un thunk nuevo (pending, fulfilled, rejected)
   },
 })
 

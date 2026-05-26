@@ -1,3 +1,4 @@
+// Acá están todas las llamadas HTTP al backend — cada función usa api.js que agrega el token JWT automáticamente
 import { api } from './api'
 
 export const comentariosService = {
@@ -9,4 +10,6 @@ export const comentariosService = {
   listarPorCliente: (dni) => api.get(`/comentarios/cliente/${dni}`),
   listarPorCredito: (idCredito) => api.get(`/comentarios/credito/${idCredito}`),
   listarPorCobranza: (idCobranza) => api.get(`/comentarios/cobranza/${idCobranza}`),
+
+  // Acá se agregan llamadas a endpoints nuevos del backend
 }

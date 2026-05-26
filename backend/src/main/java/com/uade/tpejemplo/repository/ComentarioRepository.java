@@ -19,4 +19,6 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Long> {
     List<Comentario> findByTipoEntidad(TipoEntidad tipoEntidad);
 
     List<Comentario> findByUsuarioId(Long idUsuario);
+
+    // Acá se agregan queries nuevas — Spring JPA las implementa automáticamente por nombre de método
 }

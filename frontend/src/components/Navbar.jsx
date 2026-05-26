@@ -1,11 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../store/slices/authSlice';
+import { logout, selectAuth } from '../store/slices/authSlice';
 
 export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user     = useSelector((state) => state.auth.user);
+  const { username, token } = useSelector(selectAuth);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -15,12 +15,13 @@ export default function Navbar() {
   return (
     <nav style={styles.nav}>
       <span style={styles.brand}>💳 Créditos UADE</span>
-      {user && (
+      {token && (
         <div style={styles.links}>
-          <Link to="/clientes"  style={styles.link}>Clientes</Link>
-          <Link to="/creditos"  style={styles.link}>Créditos</Link>
-          <Link to="/cobranzas" style={styles.link}>Cobranzas</Link>
-          <span style={styles.user}>👤 {user.username}</span>
+          <Link to="/clientes"    style={styles.link}>Clientes</Link>
+          <Link to="/creditos"    style={styles.link}>Créditos</Link>
+          <Link to="/cobranzas"   style={styles.link}>Cobranzas</Link>
+          <Link to="/comentarios" style={styles.link}>Comentarios</Link>
+          <span style={styles.user}>👤 {username}</span>
           <button onClick={handleLogout} style={styles.btn}>Salir</button>
         </div>
       )}

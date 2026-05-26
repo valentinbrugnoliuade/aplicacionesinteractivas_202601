@@ -46,5 +46,8 @@ public class ComentarioResponse {
     // ▶ Entidad referenciada
     private Long idCredito;
     private Long idCobranza;
+
+    // Campos nuevos de la respuesta se agregan acá
+    // OJO: al usar @AllArgsConstructor el orden importa — agregarlo también en toResponse() de ComentarioServiceImpl
 // ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
 }

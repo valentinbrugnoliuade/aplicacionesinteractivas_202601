@@ -66,4 +66,7 @@ public class ComentarioController {
     public ResponseEntity<List<ComentarioResponse>> listarPorCobranza(@PathVariable Long idCobranza) {
         return ResponseEntity.ok(comentarioService.listarPorCobranza(idCobranza));
     }
+
+    // Acá se agregan endpoints nuevos con @GetMapping, @PostMapping, etc.
+    // Cada endpoint nuevo también necesita su método en ComentarioService y ComentarioServiceImpl
 }
