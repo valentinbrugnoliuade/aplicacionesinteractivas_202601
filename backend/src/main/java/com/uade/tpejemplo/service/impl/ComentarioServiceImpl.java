@@ -124,6 +124,13 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     // Acá se valida la lógica de negocio antes de persistir — lanza BusinessException (HTTP 400) si algo falla
     private void validarReferencia(ComentarioRequest request) {
+        if (request == null) {
+            throw new BusinessException("La request de comentario es obligatoria.");
+        }
+        if (request.getTipoEntidad() == null) {
+            throw new BusinessException("El tipo de entidad es obligatorio.");
+        }
+
         switch (request.getTipoEntidad()) {
             case CLIENTE -> {
                 if (request.getDniCliente() == null || request.getDniCliente().isBlank()) {

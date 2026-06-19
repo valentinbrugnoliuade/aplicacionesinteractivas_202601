@@ -15,7 +15,7 @@ async function request(method, path, body = null) {
     let msg = `Error ${res.status}`
     try {
       const data = await res.json()
-      msg = data.message || data.error || msg
+      msg = data?.mensajes?.[0] || data?.message || data?.error || msg
     } catch (_) {}
     throw new Error(msg)
   }
