@@ -10,4 +10,6 @@ public interface CobranzaService {
     CobranzaResponse registrar(CobranzaRequest request);
 
     List<CobranzaResponse> listarPorCredito(Long idCredito);
+
+    void anular(Long id);
 }

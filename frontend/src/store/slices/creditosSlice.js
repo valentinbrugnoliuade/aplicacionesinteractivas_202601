@@ -16,6 +16,13 @@ export const crearCredito = createAsyncThunk('creditos/crear', async (data, { re
   catch (err) { return rejectWithValue(err.message) }
 })
 
+export const anularCredito = createAsyncThunk('creditos/anular', async (id, { rejectWithValue }) => {
+  try {
+    await creditosService.anular(id)
+    return id
+  } catch (err) { return rejectWithValue(err.message) }
+})
+
 const creditosSlice = createSlice({
   name: 'creditos',
   initialState: { list: [], selected: null, loading: false, error: null, success: null },
@@ -38,6 +45,13 @@ const creditosSlice = createSlice({
         s.success = `Crédito #${a.payload.id} creado correctamente`
       })
       .addCase(crearCredito.rejected, (s, a) => { s.loading = false; s.error = a.payload })
+      .addCase(anularCredito.pending, (s) => { s.error = null; s.success = null })
+      .addCase(anularCredito.fulfilled, (s, a) => {
+        const idx = s.list.findIndex(c => c.id === a.payload)
+        if (idx !== -1) s.list[idx] = { ...s.list[idx], anulado: true }
+        s.success = `Crédito #${a.payload} anulado correctamente`
+      })
+      .addCase(anularCredito.rejected, (s, a) => { s.error = a.payload })
   },
 })
 

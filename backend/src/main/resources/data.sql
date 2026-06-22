@@ -9,10 +9,10 @@ INSERT INTO clientes (dni, nombre) VALUES
 -- =====================================================
 -- Creditos
 -- =====================================================
-INSERT INTO creditos (dni_cliente, deuda_original, fecha, importe_cuota, cantidad_cuotas) VALUES
-('20111222', 50000.00, '2026-01-10', 5000.00, 10),
-('30444555', 30000.00, '2026-02-15', 3000.00, 10),
-('25789012', 20000.00, '2026-03-01', 4000.00, 5);
+INSERT INTO creditos (dni_cliente, deuda_original, fecha, importe_cuota, cantidad_cuotas, anulado) VALUES
+('20111222', 50000.00, '2026-01-10', 5000.00, 10, false),
+('30444555', 30000.00, '2026-02-15', 3000.00, 10, false),
+('25789012', 20000.00, '2026-03-01', 4000.00, 5, false);
 
 -- =====================================================
 -- Cuotas (para credito id=1: 10 cuotas)
@@ -57,8 +57,7 @@ INSERT INTO cuotas (id_credito, id_cuota, fecha_vencimiento) VALUES
 -- =====================================================
 -- Cobranzas (algunos pagos registrados)
 -- =====================================================
-INSERT INTO cobranzas (id_credito, id_cuota, importe) VALUES
-(1, 1, 5000.00),
-(1, 2, 5000.00),
-(2, 1, 3000.00);
-
+INSERT INTO cobranzas (id_credito, id_cuota, importe, fecha_cobranza, anulada) VALUES
+(1, 1, 5000.00, '2026-02-10', false),
+(1, 2, 5000.00, '2026-03-10', false),
+(2, 1, 3000.00, '2026-03-15', false);

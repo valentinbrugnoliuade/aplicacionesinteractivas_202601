@@ -12,7 +12,9 @@ import com.uade.tpejemplo.repository.CuotaRepository;
 import com.uade.tpejemplo.service.CobranzaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -37,7 +39,7 @@ public class CobranzaServiceImpl implements CobranzaService {
             );
         }
 
-        Cobranza cobranza = new Cobranza(null, cuota, request.getImporte());
+        Cobranza cobranza = new Cobranza(null, cuota, request.getImporte(), LocalDate.now(), false);
         cobranzaRepository.save(cobranza);
         return toResponse(cobranza);
     }
@@ -49,12 +51,32 @@ public class CobranzaServiceImpl implements CobranzaService {
             .toList();
     }
 
+    @Override
+    @Transactional
+    public void anular(Long id) {
+        Cobranza cobranza = cobranzaRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Cobranza", "id", id));
+
+        if (cobranza.isAnulada()) {
+            throw new BusinessException("La cobranza " + id + " ya está anulada.");
+        }
+
+        if (!cobranza.getFechaCobranza().equals(LocalDate.now())) {
+            throw new BusinessException("Solo se pueden anular cobranzas del día de hoy.");
+        }
+
+        cobranza.setAnulada(true);
+        cobranzaRepository.save(cobranza);
+    }
+
     private CobranzaResponse toResponse(Cobranza cobranza) {
         return new CobranzaResponse(
             cobranza.getId(),
             cobranza.getCuota().getId().getIdCredito(),
             cobranza.getCuota().getId().getIdCuota(),
-            cobranza.getImporte()
+            cobranza.getImporte(),
+            cobranza.getFechaCobranza(),
+            cobranza.isAnulada()
         );
     }
 }

@@ -8,8 +8,10 @@ import ClientesPage from './pages/ClientesPage'
 import CreditosPage from './pages/CreditosPage'
 import CobranzasPage from './pages/CobranzasPage'
 import ComentariosPage from './pages/ComentariosPage'
+import GestorPermisos from './pages/GestorPermisos'
+import PrivateRoute from './components/PrivateRoute'
 
-function ProtectedRoute({ children }) {
+function AuthRoute({ children }) {
   const isAuthenticated = useSelector(selectIsAuthenticated)
   return isAuthenticated ? children : <Navigate to="/login" replace />
 }
@@ -22,9 +24,9 @@ export default function App() {
         <Route
           path="/"
           element={
-            <ProtectedRoute>
+            <AuthRoute>
               <Layout />
-            </ProtectedRoute>
+            </AuthRoute>
           }
         >
           <Route index element={<Navigate to="/dashboard" replace />} />
@@ -33,6 +35,14 @@ export default function App() {
           <Route path="creditos" element={<CreditosPage />} />
           <Route path="cobranzas" element={<CobranzasPage />} />
           <Route path="comentarios" element={<ComentariosPage />} />
+          <Route
+            path="admin/permisos"
+            element={
+              <PrivateRoute requiredRol="ADMIN">
+                <GestorPermisos />
+              </PrivateRoute>
+            }
+          />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

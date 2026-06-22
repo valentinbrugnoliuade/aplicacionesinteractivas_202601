@@ -11,6 +11,13 @@ export const registrarCobranza = createAsyncThunk('cobranzas/registrar', async (
   catch (err) { return rejectWithValue(err.message) }
 })
 
+export const anularCobranza = createAsyncThunk('cobranzas/anular', async (id, { rejectWithValue }) => {
+  try {
+    await cobranzasService.anular(id)
+    return id
+  } catch (err) { return rejectWithValue(err.message) }
+})
+
 const cobranzasSlice = createSlice({
   name: 'cobranzas',
   initialState: { list: [], loading: false, error: null, success: null },
@@ -29,6 +36,13 @@ const cobranzasSlice = createSlice({
         s.success = `Cobranza registrada: $${a.payload.importe}`
       })
       .addCase(registrarCobranza.rejected, (s, a) => { s.loading = false; s.error = a.payload })
+      .addCase(anularCobranza.pending, (s) => { s.error = null; s.success = null })
+      .addCase(anularCobranza.fulfilled, (s, a) => {
+        const idx = s.list.findIndex(c => c.id === a.payload)
+        if (idx !== -1) s.list[idx] = { ...s.list[idx], anulada: true }
+        s.success = `Cobranza #${a.payload} anulada correctamente`
+      })
+      .addCase(anularCobranza.rejected, (s, a) => { s.error = a.payload })
   },
 })
 

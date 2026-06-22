@@ -3,6 +3,7 @@ package com.uade.tpejemplo.service.impl;
 import com.uade.tpejemplo.dto.request.CreditoRequest;
 import com.uade.tpejemplo.dto.response.CreditoResponse;
 import com.uade.tpejemplo.dto.response.CuotaResponse;
+import com.uade.tpejemplo.exception.BusinessException;
 import com.uade.tpejemplo.exception.ResourceNotFoundException;
 import com.uade.tpejemplo.model.Cliente;
 import com.uade.tpejemplo.model.Credito;
@@ -36,17 +37,11 @@ public class CreditoServiceImpl implements CreditoService {
             .orElseThrow(() -> new ResourceNotFoundException("Cliente", "DNI", request.getDniCliente()));
 
         Credito credito = new Credito(
-            null,
-            cliente,
-            request.getDeudaOriginal(),
-            request.getFecha(),
-            request.getImporteCuota(),
-            request.getCantidadCuotas(),
-            null
+            null, cliente, request.getDeudaOriginal(), request.getFecha(),
+            request.getImporteCuota(), request.getCantidadCuotas(), false, null
         );
         creditoRepository.save(credito);
 
-        // Generar cuotas automáticamente con vencimiento mensual
         List<Cuota> cuotas = new ArrayList<>();
         for (int i = 1; i <= request.getCantidadCuotas(); i++) {
             Cuota cuota = new Cuota(
@@ -79,6 +74,26 @@ public class CreditoServiceImpl implements CreditoService {
             .toList();
     }
 
+    @Override
+    @Transactional
+    public void anular(Long id) {
+        Credito credito = creditoRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Crédito", "id", id));
+
+        if (credito.isAnulado()) {
+            throw new BusinessException("El crédito " + id + " ya está anulado.");
+        }
+
+        if (cobranzaRepository.existsByCuotaIdIdCreditoAndAnuladaFalse(id)) {
+            throw new BusinessException(
+                "No se puede anular el crédito " + id + " porque tiene cobranzas registradas."
+            );
+        }
+
+        credito.setAnulado(true);
+        creditoRepository.save(credito);
+    }
+
     private CreditoResponse toResponse(Credito credito, List<Cuota> cuotas) {
         List<CuotaResponse> cuotasResponse = cuotas.stream()
             .map(c -> new CuotaResponse(
@@ -99,6 +114,7 @@ public class CreditoServiceImpl implements CreditoService {
             credito.getFecha(),
             credito.getImporteCuota(),
             credito.getCantidadCuotas(),
+            credito.isAnulado(),
             cuotasResponse
         );
     }

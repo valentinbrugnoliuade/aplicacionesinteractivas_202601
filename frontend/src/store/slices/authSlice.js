@@ -25,6 +25,8 @@ const authSlice = createSlice({
     token: tokenFromStorage || null,
     username: null,
     rol: null,
+    puedeAnularCredito: false,
+    puedeAnularCobranza: false,
     loading: false,
     error: null,
   },
@@ -33,6 +35,8 @@ const authSlice = createSlice({
       state.token = null
       state.username = null
       state.rol = null
+      state.puedeAnularCredito = false
+      state.puedeAnularCobranza = false
       localStorage.removeItem('token')
     },
     clearError(state) {
@@ -46,6 +50,8 @@ const authSlice = createSlice({
       state.token = action.payload.token
       state.username = action.payload.username
       state.rol = action.payload.rol
+      state.puedeAnularCredito = action.payload.puedeAnularCredito ?? false
+      state.puedeAnularCobranza = action.payload.puedeAnularCobranza ?? false
       localStorage.setItem('token', action.payload.token)
     }
     const handleRejected = (state, action) => {

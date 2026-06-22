@@ -18,5 +18,6 @@ public class CreditoResponse {
     private LocalDate fecha;
     private BigDecimal importeCuota;
     private Integer cantidadCuotas;
+    private boolean anulado;
     private List<CuotaResponse> cuotas;
 }

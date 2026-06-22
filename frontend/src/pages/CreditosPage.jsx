@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
-import { crearCredito, fetchCreditosPorCliente, selectCreditos, clearMessages, clearList } from '../store/slices/creditosSlice'
-import { PageHeader, Card, CardHeader, Alert, Btn, FormGroup, FormRow, Table, Badge, Spinner } from '../components/ui/UI'
+import { crearCredito, fetchCreditosPorCliente, anularCredito, selectCreditos, clearMessages, clearList } from '../store/slices/creditosSlice'
+import { selectAuth } from '../store/slices/authSlice'
+import { PageHeader, Card, CardHeader, Alert, Btn, FormGroup, FormRow, Spinner } from '../components/ui/UI'
 import styles from './Pages.module.css'
 
 const emptyForm = { dniCliente: '', deudaOriginal: '', fecha: '', importeCuota: '', cantidadCuotas: '' }
@@ -11,6 +12,7 @@ export default function CreditosPage() {
   const dispatch = useDispatch()
   const [searchParams] = useSearchParams()
   const { list, loading, error, success } = useSelector(selectCreditos)
+  const { puedeAnularCredito } = useSelector(selectAuth)
   const [form, setForm] = useState({ ...emptyForm, dniCliente: searchParams.get('dni') || '' })
   const [formError, setFormError] = useState({})
   const [buscarDni, setBuscarDni] = useState(searchParams.get('dni') || '')
@@ -56,26 +58,11 @@ export default function CreditosPage() {
     else dispatch(clearList())
   }
 
-  const columns = [
-    { key: 'id', label: 'ID', render: (v) => `#${v}` },
-    { key: 'dniCliente', label: 'DNI cliente' },
-    { key: 'nombreCliente', label: 'Nombre' },
-    { key: 'deudaOriginal', label: 'Deuda', render: (v) => `$${Number(v).toLocaleString('es-AR')}` },
-    { key: 'importeCuota', label: 'Cuota', render: (v) => `$${Number(v).toLocaleString('es-AR')}` },
-    { key: 'cantidadCuotas', label: 'Cuotas' },
-    { key: 'fecha', label: 'Fecha' },
-    {
-      key: 'cuotas',
-      label: 'Estado',
-      render: (cuotas) => {
-        if (!cuotas?.length) return <Badge variant="default">Sin cuotas</Badge>
-        const pagadas = cuotas.filter((c) => c.pagada).length
-        const total = cuotas.length
-        const variant = pagadas === total ? 'success' : pagadas === 0 ? 'warning' : 'info'
-        return <Badge variant={variant}>{pagadas}/{total} pagadas</Badge>
-      },
-    },
-  ]
+  const handleAnular = (id) => {
+    if (window.confirm(`¿Estás seguro de que querés anular el crédito #${id}?`)) {
+      dispatch(anularCredito(id))
+    }
+  }
 
   return (
     <div className={styles.page}>
@@ -123,8 +110,72 @@ export default function CreditosPage() {
           />
           <Btn type="submit">Buscar</Btn>
         </form>
-        {loading ? <Spinner /> : <Table columns={columns} data={list} emptyText="Buscá un cliente para ver sus créditos" />}
+        {loading ? <Spinner /> : (
+          list.length === 0 ? (
+            <p style={{ color: '#888', textAlign: 'center', padding: '24px' }}>Buscá un cliente para ver sus créditos</p>
+          ) : (
+            <div style={{ overflowX: 'auto' }}>
+              <table style={tbl.table}>
+                <thead>
+                  <tr>
+                    <th style={tbl.th}>ID</th>
+                    <th style={tbl.th}>DNI</th>
+                    <th style={tbl.th}>Nombre</th>
+                    <th style={tbl.th}>Deuda</th>
+                    <th style={tbl.th}>Cuota</th>
+                    <th style={tbl.th}>Cuotas</th>
+                    <th style={tbl.th}>Fecha</th>
+                    <th style={tbl.th}>Estado</th>
+                    {puedeAnularCredito && <th style={tbl.th}>Acción</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {list.map((c) => (
+                    <tr key={c.id} style={c.anulado ? tbl.rowAnulado : tbl.row}>
+                      <td style={tbl.td}>#{c.id}</td>
+                      <td style={tbl.td}>{c.dniCliente}</td>
+                      <td style={tbl.td}>{c.nombreCliente}</td>
+                      <td style={tbl.td}>${Number(c.deudaOriginal).toLocaleString('es-AR')}</td>
+                      <td style={tbl.td}>${Number(c.importeCuota).toLocaleString('es-AR')}</td>
+                      <td style={tbl.td}>{c.cantidadCuotas}</td>
+                      <td style={tbl.td}>{c.fecha}</td>
+                      <td style={tbl.td}>
+                        {c.anulado ? (
+                          <span style={tbl.badgeAnulado}>ANULADO</span>
+                        ) : (
+                          <span style={tbl.badgeOk}>
+                            {c.cuotas ? `${c.cuotas.filter(x => x.pagada).length}/${c.cuotas.length} pagadas` : 'Sin cuotas'}
+                          </span>
+                        )}
+                      </td>
+                      {puedeAnularCredito && (
+                        <td style={tbl.td}>
+                          {!c.anulado && (
+                            <button onClick={() => handleAnular(c.id)} style={tbl.btnAnular}>
+                              Anular
+                            </button>
+                          )}
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )
+        )}
       </Card>
     </div>
   )
+}
+
+const tbl = {
+  table: { width: '100%', borderCollapse: 'collapse' },
+  th: { textAlign: 'left', padding: '10px 12px', borderBottom: '2px solid #e0e0e0', color: '#555', fontWeight: 600, fontSize: '0.9rem' },
+  row: { borderBottom: '1px solid #f0f0f0' },
+  rowAnulado: { borderBottom: '1px solid #f0f0f0', opacity: 0.5, textDecoration: 'line-through' },
+  td: { padding: '10px 12px', color: '#333', fontSize: '0.9rem' },
+  badgeOk: { background: '#e8f5e9', color: '#2e7d32', borderRadius: '4px', padding: '2px 8px', fontSize: '0.8rem' },
+  badgeAnulado: { background: '#ffebee', color: '#c62828', borderRadius: '4px', padding: '2px 8px', fontSize: '0.8rem', fontWeight: 700 },
+  btnAnular: { background: '#e53935', color: 'white', border: 'none', padding: '4px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85rem' },
 }

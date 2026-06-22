@@ -2,6 +2,7 @@ package com.uade.tpejemplo.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,7 +28,13 @@ public class GlobalExceptionHandler {
         );
     }
 
-    // Captura errores de @Valid en los request
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+            new ErrorResponse(403, "Acceso denegado", List.of("No tiene permisos para realizar esta acción."), LocalDateTime.now())
+        );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
         List<String> errores = ex.getBindingResult().getFieldErrors().stream()

@@ -2,11 +2,14 @@ package com.uade.tpejemplo.controller;
 
 import com.uade.tpejemplo.dto.request.CreditoRequest;
 import com.uade.tpejemplo.dto.response.CreditoResponse;
+import com.uade.tpejemplo.exception.BusinessException;
+import com.uade.tpejemplo.model.Usuario;
 import com.uade.tpejemplo.service.CreditoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,5 +34,17 @@ public class CreditoController {
     @GetMapping("/cliente/{dni}")
     public ResponseEntity<List<CreditoResponse>> listarPorCliente(@PathVariable String dni) {
         return ResponseEntity.ok(creditoService.listarPorCliente(dni));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> anular(
+        @PathVariable Long id,
+        @AuthenticationPrincipal Usuario usuario
+    ) {
+        if (!usuario.isPuedeAnularCredito()) {
+            throw new BusinessException("No tiene permisos para anular créditos.");
+        }
+        creditoService.anular(id);
+        return ResponseEntity.noContent().build();
     }
 }

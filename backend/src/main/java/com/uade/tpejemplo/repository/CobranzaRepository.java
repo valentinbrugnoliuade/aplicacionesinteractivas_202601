@@ -12,4 +12,6 @@ public interface CobranzaRepository extends JpaRepository<Cobranza, Long> {
     List<Cobranza> findByCuotaIdIdCredito(Long idCredito);
 
     boolean existsByCuotaIdIdCreditoAndCuotaIdIdCuota(Long idCredito, Integer idCuota);
+
+    boolean existsByCuotaIdIdCreditoAndAnuladaFalse(Long idCredito);
 }
